@@ -9,34 +9,6 @@ void HTTPClient::setup() {
     Serial.println("HTTPClient Ready");
 };
 
-int HTTPClient::loop() {
-    this->parseEspInput();
-
-    if (this->inputReady) {
-        Serial.println(this->input);
-
-        if (currentInputEqual("locked")) {
-            Serial.println("ok");
-        }
-
-        this->input = "";
-        this->inputReady = false;
-    }
-
-    if (millis() > 8000 + checkStateTimer) {
-        executeFetch();
-        checkStateTimer = millis();
-    }
-    if (millis() > lockTimer + 16000) {
-        executeLock();
-        lockTimer = millis();
-    }
-    if (millis() > unlockTimer + 16000) {
-        executeUnlock();
-        unlockTimer = millis();
-    }
-};
-
 void HTTPClient::parseEspInput() {
     while (ESPserial->available()) {
         char c = this->ESPserial->read();
@@ -57,14 +29,4 @@ bool HTTPClient::currentInputEqual(String text) {
 
 void HTTPClient::executeAction(String action){
     ESPserial->println(action);
-}
-
-void HTTPClient::executeFetch(){
-    this->executeAction("GET");
-}
-void HTTPClient::executeLock(){
-    this->executeAction("LOCK");
-}
-void HTTPClient::executeUnlock(){
-    this->executeAction("UNLOCK");
 }

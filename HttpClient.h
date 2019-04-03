@@ -10,27 +10,19 @@ class HTTPClient {
     HTTPClient(int pinNumberRX, int pinNumberTX);
 
     void setup();
-    int loop();
+    virtual void loop() = 0;
 
-    void executeFetch();
-    void executeLock();
-    void executeUnlock();
-
-   private:
-    int pinNumberRX;
-    int pinNumberTX;
-    SoftwareSerial* ESPserial;
-
+   protected:
     String input;
     bool inputReady = false;
 
     void parseEspInput();
     bool currentInputEqual(String text);
-
     void executeAction(String action);
 
-    unsigned long checkStateTimer = 0;
-    unsigned long lockTimer = 4000;
-    unsigned long unlockTimer = 12000;
+   private:
+    int pinNumberRX;
+    int pinNumberTX;
+    SoftwareSerial* ESPserial;
 };
 #endif

@@ -1,7 +1,7 @@
 
 #include "sensorSound.h"
 #include "sensorIR.h"
-#include "HTTPClient.h"
+#include "DoorHTTPClient.h"
 
 #define STATE_OFF 0
 #define STATE_STANDBY 1
@@ -9,7 +9,7 @@
 
 int systemState;
 
-HTTPClient doorHttpClient(2,3);
+DoorHTTPClient doorHttpClient(2,3);
 SensorIR sensorIR(5);
 SensorSound sensorSound(7);
 
@@ -25,17 +25,17 @@ void stopListening() {
 void setup() {
     Serial.begin(9600);
     // sensorSound.setup();
-    doorHttpClient.setup();
+    // doorHttpClient.setup();
 
     systemState == STATE_OFF;
 }
 
 void loop() {
     
-    doorHttpClient.loop();
+    /* Door Section */
+    // doorHttpClient.loop();
 
-
-    // // // Turn on listening state
+    /* Sound sensor Section */
     // if (systemState == STATE_OFF) {
     //     startListening();
     // }
