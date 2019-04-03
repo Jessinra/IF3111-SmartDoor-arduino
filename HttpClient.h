@@ -10,7 +10,7 @@ class HTTPClient {
     HTTPClient(int pinNumberRX, int pinNumberTX);
 
     void setup();
-    virtual void loop() = 0;
+    virtual int loop() = 0;
 
    protected:
     String input;

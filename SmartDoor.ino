@@ -1,17 +1,21 @@
 
-#include "SensorSound.h"
-#include "SensorIR.h"
+#include "DoorController.h"
 #include "DoorHTTPClient.h"
+#include "SensorIR.h"
+#include "SensorSound.h"
 
 #define STATE_OFF 0
 #define STATE_STANDBY 1
 #define STATE_LISTENING 3
 
 int systemState;
+int doorState;
 
-DoorHTTPClient doorHttpClient(2,3);
+DoorHTTPClient doorHttpClient(2, 3);
 SensorIR sensorIR(5);
 SensorSound sensorSound(7);
+
+DoorController doorController(A2);
 
 void startListening() {
     systemState = STATE_LISTENING;
@@ -25,15 +29,31 @@ void stopListening() {
 void setup() {
     Serial.begin(9600);
     // sensorSound.setup();
-    // doorHttpClient.setup();
+    doorHttpClient.setup();
+    doorController.setup();
 
     systemState == STATE_OFF;
 }
 
 void loop() {
-    
     /* Door Section */
-    // doorHttpClient.loop();
+    doorState = doorHttpClient.loop();
+
+    // doorState = 1;
+    // Serial.println("lock");
+
+    doorController.setDoorState(doorState);
+    doorController.syncDoorState();
+
+    // delay(6000);
+
+    // doorState = 0;
+    // Serial.println("unlock");
+
+    // doorController.setDoorState(doorState);
+    // doorController.syncDoorState();
+    // delay(6000);
+
 
     /* Sound sensor Section */
     // if (systemState == STATE_OFF) {

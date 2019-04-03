@@ -10,7 +10,7 @@ class DoorHTTPClient : HTTPClient{
         DoorHTTPClient(int pinNumberRX, int pinNumberTX);
         
         void setup();
-        void loop();
+        int loop();
 
         void executeFetch();
         void executeLock();
@@ -21,5 +21,8 @@ class DoorHTTPClient : HTTPClient{
         unsigned long checkStateTimer = 0;
         unsigned long lockTimer = 4000;
         unsigned long unlockTimer = 12000;
+
+        const int DOOR_LOCKED = 1;
+        const int DOOR_UNLOCKED = 0;
 };
 #endif

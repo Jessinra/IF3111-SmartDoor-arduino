@@ -1,6 +1,6 @@
 #include "DoorHttpClient.h"
 
-DoorHTTPClient::DoorHTTPClient(int pinNumberRX, int pinNumberTX) : HTTPClient(pinNumberRX, pinNumberTX){
+DoorHTTPClient::DoorHTTPClient(int pinNumberRX, int pinNumberTX) : HTTPClient(pinNumberRX, pinNumberTX) {
     //
 }
 
@@ -9,19 +9,8 @@ void DoorHTTPClient::setup() {
     Serial.println("DoorHTTPClient Ready");
 };
 
-void DoorHTTPClient::loop() {
-    this->parseEspInput();
-
-    if (this->inputReady) {
-        Serial.println(this->input);
-
-        if (currentInputEqual("locked")) {
-            Serial.println("ok");
-        }
-
-        this->input = "";
-        this->inputReady = false;
-    }
+int DoorHTTPClient::loop() {
+    int doorState;
 
     if (millis() > 8000 + checkStateTimer) {
         executeFetch();
@@ -35,14 +24,33 @@ void DoorHTTPClient::loop() {
         executeUnlock();
         unlockTimer = millis();
     }
+
+    this->parseEspInput();
+
+    if (this->inputReady) {
+        Serial.println(this->input);
+
+        if (currentInputEqual("locked")) {
+            doorState = DOOR_LOCKED;
+
+        } else if (currentInputEqual("unlocked")) {
+            doorState = DOOR_UNLOCKED;
+        } else {
+            doorState = -1;
+        }
+
+        this->input = "";
+        this->inputReady = false;
+        return doorState;
+    }
 };
 
-void DoorHTTPClient::executeFetch(){
+void DoorHTTPClient::executeFetch() {
     this->executeAction("GET");
 }
-void DoorHTTPClient::executeLock(){
+void DoorHTTPClient::executeLock() {
     this->executeAction("LOCK");
 }
-void DoorHTTPClient::executeUnlock(){
+void DoorHTTPClient::executeUnlock() {
     this->executeAction("UNLOCK");
 }
