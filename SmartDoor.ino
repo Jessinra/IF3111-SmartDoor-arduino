@@ -1,17 +1,19 @@
 
 #include "sensorSound.h"
+#include "sensorIR.h"
 
 #define STATE_OFF 0
 #define STATE_STANDBY 1
 #define STATE_LISTENING 3
 
 int systemState;
-SoundSensor soundSensor(7);
+SensorIR sensorIR(5);
+SensorSound sonsorSound(7);
 
 void startListening() {
     systemState = STATE_LISTENING;
-    soundSensor.resetListeningTimer();
-    soundSensor.resetPattern();
+    sonsorSound.resetListeningTimer();
+    sonsorSound.resetPattern();
 }
 void stopListening() {
     systemState = STATE_STANDBY;
@@ -19,7 +21,8 @@ void stopListening() {
 
 void setup() {
     Serial.begin(9600);
-    soundSensor.setup();
+    sonsorSound.setup();
+
     systemState == STATE_OFF;
 }
 
@@ -30,7 +33,7 @@ void loop() {
     }
 
     if (systemState == STATE_LISTENING) {
-        int status = soundSensor.loop();
+        int status = sonsorSound.loop();
 
         if (status == 1) {
             Serial.println("============= match ");
