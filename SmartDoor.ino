@@ -1,6 +1,6 @@
 
-#include "sensorSound.h"
-#include "sensorIR.h"
+#include "SensorSound.h"
+#include "SensorIR.h"
 #include "DoorHTTPClient.h"
 
 #define STATE_OFF 0

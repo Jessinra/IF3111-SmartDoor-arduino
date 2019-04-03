@@ -1,4 +1,4 @@
-#include "sensorSound.h"
+#include "SensorSound.h"
 
 SensorSound::SensorSound(int pinNumber) {
     this->pinNumber = pinNumber;

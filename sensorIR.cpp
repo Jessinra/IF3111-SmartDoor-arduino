@@ -1,4 +1,4 @@
-#include "sensorIR.h"
+#include "SensorIR.h"
 
 SensorIR::SensorIR(int pinNumber) {
     this->pinNumber = pinNumber;
