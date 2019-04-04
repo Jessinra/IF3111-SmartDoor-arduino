@@ -38,22 +38,8 @@ void setup() {
 void loop() {
     /* Door Section */
     doorState = doorHttpClient.loop();
-
-    // doorState = 1;
-    // Serial.println("lock");
-
     doorController.setDoorState(doorState);
     doorController.syncDoorState();
-
-    // delay(6000);
-
-    // doorState = 0;
-    // Serial.println("unlock");
-
-    // doorController.setDoorState(doorState);
-    // doorController.syncDoorState();
-    // delay(6000);
-
 
     /* Sound sensor Section */
     // if (systemState == STATE_OFF) {

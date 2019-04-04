@@ -10,19 +10,11 @@ void DoorHTTPClient::setup() {
 };
 
 int DoorHTTPClient::loop() {
-    int doorState;
+    int doorState = -1;
 
     if (millis() > 8000 + checkStateTimer) {
         executeFetch();
         checkStateTimer = millis();
-    }
-    if (millis() > lockTimer + 16000) {
-        executeLock();
-        lockTimer = millis();
-    }
-    if (millis() > unlockTimer + 16000) {
-        executeUnlock();
-        unlockTimer = millis();
     }
 
     this->parseEspInput();
@@ -32,7 +24,6 @@ int DoorHTTPClient::loop() {
 
         if (currentInputEqual("locked")) {
             doorState = DOOR_LOCKED;
-
         } else if (currentInputEqual("unlocked")) {
             doorState = DOOR_UNLOCKED;
         } else {
@@ -41,8 +32,9 @@ int DoorHTTPClient::loop() {
 
         this->input = "";
         this->inputReady = false;
-        return doorState;
     }
+
+    return doorState;
 };
 
 void DoorHTTPClient::executeFetch() {

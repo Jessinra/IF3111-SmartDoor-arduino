@@ -13,7 +13,7 @@ void DoorController::setup() {
 void DoorController::setDoorState(int doorState) {
     if (doorState == DOOR_LOCKED || doorState == DOOR_UNLOCKED) {
         this->doorState = doorState;
-    }
+    }   
 }
 
 void DoorController::syncDoorState() {
