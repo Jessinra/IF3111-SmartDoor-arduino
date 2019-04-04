@@ -3,6 +3,7 @@
 #include "DoorHTTPClient.h"
 #include "SensorIR.h"
 #include "SensorSound.h"
+#include "Display7Segment.h"
 
 #define STATE_OFF 0
 #define STATE_STANDBY 1
@@ -14,6 +15,7 @@ int doorState;
 DoorHTTPClient doorHttpClient(2, 3);
 SensorIR sensorIR(5);
 SensorSound sensorSound(7);
+Display7Segment display7(8, 9);
 
 DoorController doorController(A2);
 
@@ -31,6 +33,7 @@ void setup() {
     // sensorSound.setup();
     doorHttpClient.setup();
     doorController.setup();
+    display7.setup();
 
     systemState == STATE_OFF;
 }
@@ -40,6 +43,8 @@ void loop() {
     doorState = doorHttpClient.loop();
     doorController.setDoorState(doorState);
     doorController.syncDoorState();
+
+    display7.displayOnChangeState(doorState);
 
     /* Sound sensor Section */
     // if (systemState == STATE_OFF) {
