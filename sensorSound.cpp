@@ -3,10 +3,18 @@
 SensorSound::SensorSound(int pinNumber) {
     this->pinNumber = pinNumber;
     pinMode(this->pinNumber, INPUT);
-};
+}; 
 
 void SensorSound::setup() {
+
+    for(int i = 3; i > 0; i--){
+        Serial.print("Recording in : ");
+        Serial.println(i);
+        delay(1000);
+    }
     this->recordPattern();
+
+    Serial.println("Setup: Sound sensor ready");
 }
 
 int SensorSound::loop() {

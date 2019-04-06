@@ -4,19 +4,17 @@
 #include <Arduino.h>
 using namespace std;
 
-class SensorIR{
-
-    public:
+class SensorIR {
+   public:
     SensorIR(int);
 
     void setup();
     void loop();
 
-    private:
-    int pinNumber;
-
     bool isInfraredOn();
 
+   private:
+    int pinNumber;
 };
 
 #endif

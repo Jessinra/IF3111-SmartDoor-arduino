@@ -16,6 +16,9 @@ class Display7Segment {
     void display7Close();
     void display7Open();
     void display7Send();
+    void display7Idle();
+    void display7PatternMissmatch();
+    void display7Opening();
 
     void setup();
     void loop();

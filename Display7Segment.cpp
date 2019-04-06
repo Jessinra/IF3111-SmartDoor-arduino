@@ -50,6 +50,8 @@ void Display7Segment::display7Bye() {
         display->setSegments(SEG_BYE);
         delay(500);
     }
+
+    display->clear();
 }
 
 void Display7Segment::display7Close() {
@@ -120,13 +122,63 @@ void Display7Segment::display7Send() {
     }
 }
 
+void Display7Segment::display7Idle() {
+    const uint8_t SEG_IDLE[] = {
+        SEG_G,
+        SEG_G,
+        SEG_G,
+        SEG_G,
+    };
+    display->setSegments(SEG_IDLE);
+}
+
+void Display7Segment::display7PatternMissmatch() {
+    const uint8_t SEG_IDLE[] = {
+        SEG_G,
+        SEG_G,
+        SEG_G,
+        SEG_G,
+    };
+
+    for (int i = 0; i < 6; i++) {
+        display->setSegments(SEG_IDLE);
+        delay(150);
+        display->clear();
+        delay(150);
+    }
+}
+
+void Display7Segment::display7Opening() {
+    const uint8_t SEG_OPENING[] = {
+        SEG_A | SEG_B | SEG_C | SEG_D | SEG_E | SEG_F,  // O
+        SEG_A | SEG_B | SEG_E | SEG_F | SEG_G,          // P
+        SEG_A | SEG_D | SEG_E | SEG_F | SEG_G,          // E
+        SEG_C | SEG_E | SEG_G,                          // n
+        SEG_C,                                          // i
+        SEG_C | SEG_E | SEG_G,                          // n
+        SEG_A | SEG_G | SEG_C | SEG_D | SEG_E | SEG_F,  // G
+        SEG_D,
+        SEG_D,
+        SEG_D,
+        SEG_D,
+    };
+
+    display->setSegments(SEG_OPENING);
+    delay(500);
+
+    for (int i = 0; i < 8; i++) {
+        display->setSegments(SEG_OPENING + i);
+        delay(300);
+    }
+}
+
 void Display7Segment::setup() {
     this->display = new TM1637Display(this->pinCLK, this->pinDIO);
     this->display->setBrightness(this->brightness);
     this->doorState = DOOR_UNLOCKED;
 
     this->display7Hello();
-    Serial.println("7 Segment setup");
+    Serial.println("Setup: 7 Segment ready");
 }
 
 void Display7Segment::loop() {

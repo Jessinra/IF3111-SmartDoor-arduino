@@ -8,6 +8,8 @@ DoorController::DoorController(int pinNumber) {
 void DoorController::setup() {
     this->doorServo.attach(this->pinNumber);
     this->doorState = DOOR_UNLOCKED;
+
+    Serial.println("Setup: Door controller ready");
 }
 
 void DoorController::setDoorState(int doorState) {

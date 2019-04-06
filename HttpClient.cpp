@@ -6,7 +6,7 @@ HTTPClient::HTTPClient(int pinNumberRX, int pinNumberTX) {
 
 void HTTPClient::setup() {
     ESPserial->begin(9600);  //  communication with the ESP8266
-    Serial.println("HTTPClient Ready");
+    Serial.println("Setup: HTTPClient Ready");
 };
 
 void HTTPClient::parseEspInput() {

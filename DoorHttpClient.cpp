@@ -6,7 +6,7 @@ DoorHTTPClient::DoorHTTPClient(int pinNumberRX, int pinNumberTX) : HTTPClient(pi
 
 void DoorHTTPClient::setup() {
     HTTPClient::setup();
-    Serial.println("DoorHTTPClient Ready");
+    Serial.println("Setup: DoorHTTPClient Ready");
 };
 
 int DoorHTTPClient::loop() {
@@ -14,7 +14,6 @@ int DoorHTTPClient::loop() {
 
     if (millis() > 8000 + checkStateTimer) {
         executeFetch();
-        checkStateTimer = millis();
     }
 
     this->parseEspInput();
@@ -39,13 +38,16 @@ int DoorHTTPClient::loop() {
 
 void DoorHTTPClient::executeFetch() {
     this->executeAction("GET");
+    checkStateTimer = millis();
 }
 void DoorHTTPClient::executeLock() {
     this->executeAction("LOCK");
+    checkStateTimer = millis() - 5000;  // reduce the delay before next fetch
 }
 void DoorHTTPClient::executeUnlock() {
     this->executeAction("UNLOCK");
+    checkStateTimer = millis() - 5000;  // reduce the delay before next fetch
 }
-void DoorHTTPClient::executeNotify(){
+void DoorHTTPClient::executeNotify() {
     this->executeAction("NOTIFY");
 }
