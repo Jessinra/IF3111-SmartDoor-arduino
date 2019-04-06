@@ -1,6 +1,7 @@
 
 #include "DoorController.h"
 #include "DoorHTTPClient.h"
+#include "BellController.h"
 #include "SensorIR.h"
 #include "SensorSound.h"
 #include "Display7Segment.h"
@@ -13,11 +14,13 @@ int systemState;
 int doorState;
 
 DoorHTTPClient doorHttpClient(2, 3);
-SensorIR sensorIR(5);
+SensorIR sensorIR(6);
 SensorSound sensorSound(7);
-Display7Segment display7(8, 9);
+Display7Segment display7(4, 5);
 
 DoorController doorController(A2);
+BellController bellController(A3, doorHttpClient);
+
 
 void startListening() {
     systemState = STATE_LISTENING;
@@ -40,6 +43,9 @@ void setup() {
 
 void loop() {
     /* Door Section */
+
+    bellController.loop();
+
     doorState = doorHttpClient.loop();
     doorController.setDoorState(doorState);
     doorController.syncDoorState();

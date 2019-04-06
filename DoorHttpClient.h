@@ -15,6 +15,7 @@ class DoorHTTPClient : HTTPClient{
         void executeFetch();
         void executeLock();
         void executeUnlock();
+        void executeNotify();
 
     private:
 

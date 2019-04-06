@@ -89,6 +89,8 @@ void Display7Segment::display7Open() {
         display->clear();
         delay(500);
     }
+
+    display->setSegments(SEG_OPEN);
 }
 
 void Display7Segment::display7Send() {
@@ -122,6 +124,9 @@ void Display7Segment::setup() {
     this->display = new TM1637Display(this->pinCLK, this->pinDIO);
     this->display->setBrightness(this->brightness);
     this->doorState = DOOR_UNLOCKED;
+
+    this->display7Hello();
+    Serial.println("7 Segment setup");
 }
 
 void Display7Segment::loop() {

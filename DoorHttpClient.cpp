@@ -46,3 +46,6 @@ void DoorHTTPClient::executeLock() {
 void DoorHTTPClient::executeUnlock() {
     this->executeAction("UNLOCK");
 }
+void DoorHTTPClient::executeNotify(){
+    this->executeAction("NOTIFY");
+}
