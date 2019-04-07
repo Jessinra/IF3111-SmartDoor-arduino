@@ -4,6 +4,7 @@
 #include "DisplayLCD.h"
 #include "DoorController.h"
 #include "DoorHTTPClient.h"
+#include "FadeLed.h"
 #include "SensorIR.h"
 #include "SensorSound.h"
 
@@ -19,7 +20,9 @@ DoorHTTPClient doorHttpClient(2, 3);
 SensorIR sensorIR(6);
 SensorSound sensorSound(7);
 Display7Segment display7(4, 5);
-DisplayLCD displayLCD(11, 13, 9);
+DisplayLCD displayLCD(10, 13, 9);
+FadeLed led(11);
+
 DoorController doorController(A2);
 BellController bellController(A3, doorHttpClient);
 
@@ -31,6 +34,7 @@ void startListening() {
 
 void stopListening() {
     systemState = STATE_STANDBY;
+    led.turnOff();
 }
 
 void standby() {
@@ -58,19 +62,19 @@ void initializePattern() {
     delay(1000);
 
     Serial.println("Recording in : 3");
-    displayLCD.print("Recording in : 3","");
+    displayLCD.print("Recording in : 3", "");
     delay(1000);
 
     Serial.println("Recording in : 2");
-    displayLCD.print("Recording in : 2","");
+    displayLCD.print("Recording in : 2", "");
     delay(1000);
 
     Serial.println("Recording in : 1");
-    displayLCD.print("Recording in : 1","");
+    displayLCD.print("Recording in : 1", "");
     delay(1000);
-    
+
     Serial.println("Recording...");
-    displayLCD.print("Recording...","");
+    displayLCD.print("Recording...", "");
     sensorSound.recordPattern();
 
     Serial.print("Recorded hash pattern : ");
@@ -91,6 +95,11 @@ void setup() {
     display7.setup();
     Serial.println("Setup : display7 done");
     displayLCD.print("Display 7Segment", "Setup : done");
+    delay(1000);
+
+    led.setup();
+    Serial.println("Setup : led done");
+    displayLCD.print("Led", "Setup : done");
     delay(1000);
 
     bellController.setup();
@@ -136,6 +145,7 @@ void loop() {
     if (systemState == STATE_LISTENING) {
         /* Bell section */
         bellController.loop();
+        led.loop();
 
         /* Pattern matching section */
         int status = sensorSound.loop();
@@ -148,7 +158,6 @@ void loop() {
             display7.display7PatternMissmatch();
             display7.display7Idle();
             startListening();
-            // TODO : do nothing
         }
 
     } else {
@@ -158,7 +167,7 @@ void loop() {
     /* Door Section */
     doorController.setDoorState(doorState);
     doorController.syncDoorState();
-    
+
     displayLCD.displayOnChangeState(doorState);
     display7.displayOnChangeState(doorState);
 }
