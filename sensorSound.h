@@ -15,6 +15,8 @@ class SensorSound {
     void resetListeningTimer();
     void resetPattern();
 
+    int getPattern();
+
    private:
     int pinNumber;
 
@@ -29,8 +31,8 @@ class SensorSound {
     void setPattern(int input);
     void listenToPattern();
     bool isListeningTimeUp();
-    bool isPatternMatch();
     bool isSoundOn();
+    bool isPatternMatch();
 };
 
 #endif

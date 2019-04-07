@@ -2,14 +2,12 @@
 
 DoorController::DoorController(int pinNumber) {
     this->pinNumber = pinNumber;
-    pinMode(this->pinNumber, OUTPUT);
 }
 
 void DoorController::setup() {
+    pinMode(this->pinNumber, OUTPUT);
     this->doorServo.attach(this->pinNumber);
     this->doorState = DOOR_UNLOCKED;
-
-    Serial.println("Setup: Door controller ready");
 }
 
 void DoorController::setDoorState(int doorState) {

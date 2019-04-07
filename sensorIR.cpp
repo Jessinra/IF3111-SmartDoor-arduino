@@ -5,7 +5,6 @@ SensorIR::SensorIR(int pinNumber) {
 }
 
 void SensorIR::setup() {
-    Serial.println("Setup: IRSensor ready");
     pinMode(this->pinNumber, INPUT);
 }
 

@@ -6,7 +6,6 @@ DoorHTTPClient::DoorHTTPClient(int pinNumberRX, int pinNumberTX) : HTTPClient(pi
 
 void DoorHTTPClient::setup() {
     HTTPClient::setup();
-    Serial.println("Setup: DoorHTTPClient Ready");
 };
 
 int DoorHTTPClient::loop() {

@@ -2,10 +2,12 @@
 
 BellController::BellController(int pinNumber, DoorHTTPClient &httpClient) : httpClient(httpClient) {
     this->pinNumber = pinNumber;
-    pinMode(this->pinNumber, INPUT_PULLUP);
-
-    Serial.println("Setup: Bell ready");
 }
+
+void BellController::setup(){
+    pinMode(this->pinNumber, INPUT_PULLUP);
+}
+
 void BellController::sendNotification() {
     this->httpClient.executeNotify();
 }

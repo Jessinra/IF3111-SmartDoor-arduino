@@ -1,6 +1,7 @@
 
 #include "BellController.h"
 #include "Display7Segment.h"
+#include "DisplayLCD.h"
 #include "DoorController.h"
 #include "DoorHTTPClient.h"
 #include "SensorIR.h"
@@ -15,10 +16,10 @@ int doorState;
 unsigned long lastStandby = 0;
 
 DoorHTTPClient doorHttpClient(2, 3);
-Display7Segment display7(4, 5);
 SensorIR sensorIR(6);
 SensorSound sensorSound(7);
-
+Display7Segment display7(4, 5);
+DisplayLCD displayLCD(11, 13, 9);
 DoorController doorController(A2);
 BellController bellController(A3, doorHttpClient);
 
@@ -27,6 +28,7 @@ void startListening() {
     sensorSound.resetListeningTimer();
     sensorSound.resetPattern();
 }
+
 void stopListening() {
     systemState = STATE_STANDBY;
 }
@@ -34,6 +36,7 @@ void stopListening() {
 void standby() {
     systemState = STATE_STANDBY;
     lastStandby = millis();
+    displayLCD.turnOn();
     display7.display7Hello();
     display7.display7Idle();
 }
@@ -44,17 +47,78 @@ void checkIfShouldSleep() {
 
         doorHttpClient.executeLock();
         display7.display7Bye();
+        // displayLCD.turnOff();
     }
+}
+
+void initializePattern() {
+    /* Record Pattern */
+    Serial.println("====== Recording Pattern =========");
+    displayLCD.print("================", "   Set pattern  ");
+    delay(1000);
+
+    Serial.println("Recording in : 3");
+    displayLCD.print("Recording in : 3","");
+    delay(1000);
+
+    Serial.println("Recording in : 2");
+    displayLCD.print("Recording in : 2","");
+    delay(1000);
+
+    Serial.println("Recording in : 1");
+    displayLCD.print("Recording in : 1","");
+    delay(1000);
+    
+    Serial.println("Recording...");
+    displayLCD.print("Recording...","");
+    sensorSound.recordPattern();
+
+    Serial.print("Recorded hash pattern : ");
+    Serial.println(sensorSound.getPattern());
+
+    displayLCD.print("Hash pattern : ", String(sensorSound.getPattern()));
+    delay(3000);
 }
 
 void setup() {
     Serial.begin(9600);
-    doorHttpClient.setup();
-    doorController.setup();
-    
+
+    displayLCD.setup();
+    Serial.println("Setup : displayLCD done");
+    displayLCD.print("Display LCD", "Setup : done");
+    delay(1000);
+
     display7.setup();
-    sensorSound.setup();
+    Serial.println("Setup : display7 done");
+    displayLCD.print("Display 7Segment", "Setup : done");
+    delay(1000);
+
+    bellController.setup();
+    Serial.println("Setup : bellController done");
+    displayLCD.print("Bell Controller", "Setup : done");
+    delay(1000);
+
+    doorHttpClient.setup();
+    Serial.println("Setup : doorHttpClient done");
+    displayLCD.print("Door HTTPClient", "Setup : done");
+    delay(1000);
+
+    doorController.setup();
+    Serial.println("Setup : doorController done");
+    displayLCD.print("Door Controller", "Setup : done");
+    delay(1000);
+
     sensorIR.setup();
+    Serial.println("Setup : sensorIR done");
+    displayLCD.print("Sensor IR", "Setup : done");
+    delay(1000);
+
+    sensorSound.setup();
+    Serial.println("Setup : sensorSound done");
+    displayLCD.print("Sensor Sound", "Setup : done");
+    delay(1000);
+
+    initializePattern();
 
     systemState == STATE_SLEEP;
 }
@@ -94,6 +158,7 @@ void loop() {
     /* Door Section */
     doorController.setDoorState(doorState);
     doorController.syncDoorState();
-
+    
+    displayLCD.displayOnChangeState(doorState);
     display7.displayOnChangeState(doorState);
 }

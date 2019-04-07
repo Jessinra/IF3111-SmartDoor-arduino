@@ -10,6 +10,7 @@ class BellController {
     public:
         BellController(int pinNumber, DoorHTTPClient &httpClient);
         void sendNotification();
+        void setup();
         void loop();
 
     private:

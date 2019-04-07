@@ -2,19 +2,10 @@
 
 SensorSound::SensorSound(int pinNumber) {
     this->pinNumber = pinNumber;
-    pinMode(this->pinNumber, INPUT);
 }; 
 
 void SensorSound::setup() {
-
-    for(int i = 3; i > 0; i--){
-        Serial.print("Recording in : ");
-        Serial.println(i);
-        delay(1000);
-    }
-    this->recordPattern();
-
-    Serial.println("Setup: Sound sensor ready");
+    pinMode(this->pinNumber, INPUT);
 }
 
 int SensorSound::loop() {
@@ -34,7 +25,6 @@ int SensorSound::loop() {
 }
 
 void SensorSound::recordPattern() {
-    Serial.println("========== recording pattern ============");
 
     this->pattern = 0;
     this->resetListeningTimer();
@@ -46,6 +36,28 @@ void SensorSound::recordPattern() {
         }
     }
     setPattern(this->pattern);
+}
+void SensorSound::resetListeningTimer() {
+    this->listeningTimer = millis();
+}
+
+void SensorSound::resetPattern() {
+    this->pattern = this->recordedPattern;
+}
+
+int SensorSound::getPattern(){
+    return this->pattern;
+}
+
+void SensorSound::setPattern(int input) {
+    this->recordedPattern = input;
+}
+
+void SensorSound::listenToPattern() {
+    if (this->isSoundOn()) {
+        this->pattern--;
+        Serial.println(this->pattern);
+    }
 }
 
 bool SensorSound::isListeningTimeUp() {
@@ -60,24 +72,3 @@ bool SensorSound::isPatternMatch() {
     return (this->pattern > -this->patternTolerance) && (this->pattern < this->patternTolerance);
 }
 
-void SensorSound::resetListeningTimer() {
-    this->listeningTimer = millis();
-}
-
-void SensorSound::resetPattern() {
-    this->pattern = this->recordedPattern;
-}
-
-void SensorSound::listenToPattern() {
-    if (this->isSoundOn()) {
-        this->pattern--;
-        Serial.println(this->pattern);
-    }
-}
-
-void SensorSound::setPattern(int input) {
-    this->recordedPattern = input;
-
-    Serial.print("recorded pattern : ");
-    Serial.println(input);
-}

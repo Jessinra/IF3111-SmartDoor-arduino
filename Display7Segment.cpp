@@ -5,6 +5,19 @@ Display7Segment::Display7Segment(int pinCLK, int pinDIO) {
     this->pinDIO = pinDIO;
 }
 
+void Display7Segment::setup() {
+    this->display = new TM1637Display(this->pinCLK, this->pinDIO);
+    this->display->setBrightness(this->brightness);
+    this->doorState = DOOR_UNLOCKED;
+
+    this->display7Idle();
+    delay(500);
+    display->clear();
+}
+
+void Display7Segment::loop() {
+}
+
 void Display7Segment::displayOnChangeState(int doorState) {
     if (this->doorState == DOOR_LOCKED && doorState == DOOR_UNLOCKED) {
         this->doorState = doorState;
@@ -91,8 +104,6 @@ void Display7Segment::display7Open() {
         display->clear();
         delay(500);
     }
-
-    display->setSegments(SEG_OPEN);
 }
 
 void Display7Segment::display7Send() {
@@ -172,20 +183,3 @@ void Display7Segment::display7Opening() {
     }
 }
 
-void Display7Segment::setup() {
-    this->display = new TM1637Display(this->pinCLK, this->pinDIO);
-    this->display->setBrightness(this->brightness);
-    this->doorState = DOOR_UNLOCKED;
-
-    this->display7Hello();
-    Serial.println("Setup: 7 Segment ready");
-}
-
-void Display7Segment::loop() {
-    // put your main code here, to run repeatedly:
-    display7Hello();
-    display7Close();
-    display7Open();
-    display7Bye();
-    display7Send();
-}
